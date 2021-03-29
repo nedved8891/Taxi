@@ -1,0 +1,14 @@
+<dialogue name="Taxi_3">
+  <node id="0" npcText="Hi there!">
+    <answer text="Where to?" toNode="1" status="False" />
+    <answer text="Hi mam, where would you like to go?" toNode="1" status="True" />
+  </node>
+  <node id="1" npcText="The airport!">
+    <answer text="Mam, u r the 3rd pregnant lady, whom I’m dropping to the airport today!" toNode="2" status="False" />
+    <answer text="Yes, mam" exit="True" status="True" />
+  </node>
+  <node id="1" npcText="But I’m not pregnant! &lt;sprite=2&gt;">
+    <answer text="But we haven’t reached the airport yet! &lt;sprite=6&gt;" toNode="2" status="False" />
+    <answer text="Oh, I’m so sorry, where to?" exit="True" status="True" />
+  </node>
+</dialogue>

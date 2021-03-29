@@ -1,0 +1,10 @@
+<dialogue name="Taxi_2">
+  <node id="0" npcText="My friend, I’m afraid this is a kidnapping! &lt;sprite=0&gt; &lt;sprite=0&gt; &lt;sprite=0&gt;">
+    <answer text="Does that mean you don’t have to pay?" toNode="1" status="True" />
+    <answer text="WTF. I will call the Police!" toNode="1" status="False" />
+  </node>
+  <node id="1" npcText="Eeer, I guess so!">
+    <answer text="Whoo Hooo!" exit="True" status="True" />
+    <answer text="It means no tip??? &lt;sprite=11&gt;" exit="True" status="False" />
+  </node>
+</dialogue>

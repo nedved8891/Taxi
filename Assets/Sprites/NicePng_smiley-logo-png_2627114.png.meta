@@ -1,0 +1,632 @@
+fileFormatVersion: 2
+guid: 52ff117abdd9c674f970d21e3c7c010c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -3415520928107523601
+    second: NicePng_smiley-logo-png_2627114_0
+  - first:
+      213: 5172910614735409340
+    second: NicePng_smiley-logo-png_2627114_1
+  - first:
+      213: -5729729631994752640
+    second: NicePng_smiley-logo-png_2627114_2
+  - first:
+      213: -520296623484351986
+    second: NicePng_smiley-logo-png_2627114_3
+  - first:
+      213: 5537297735696628358
+    second: NicePng_smiley-logo-png_2627114_4
+  - first:
+      213: 8234147256212124536
+    second: NicePng_smiley-logo-png_2627114_5
+  - first:
+      213: 8175710197103963942
+    second: NicePng_smiley-logo-png_2627114_6
+  - first:
+      213: -1352155958441057153
+    second: NicePng_smiley-logo-png_2627114_7
+  - first:
+      213: -1303901496741529441
+    second: NicePng_smiley-logo-png_2627114_8
+  - first:
+      213: -3643046841123438136
+    second: NicePng_smiley-logo-png_2627114_9
+  - first:
+      213: -3516220054621236043
+    second: NicePng_smiley-logo-png_2627114_10
+  - first:
+      213: 3874570558314653577
+    second: NicePng_smiley-logo-png_2627114_11
+  - first:
+      213: -1436762521196511623
+    second: NicePng_smiley-logo-png_2627114_12
+  - first:
+      213: -2074392233416847171
+    second: NicePng_smiley-logo-png_2627114_13
+  - first:
+      213: -3006651291981650027
+    second: NicePng_smiley-logo-png_2627114_14
+  - first:
+      213: 3212481631113531970
+    second: NicePng_smiley-logo-png_2627114_15
+  - first:
+      213: -5139250136269638329
+    second: NicePng_smiley-logo-png_2627114_16
+  - first:
+      213: 8550654597740426527
+    second: NicePng_smiley-logo-png_2627114_17
+  - first:
+      213: -9060272632671969882
+    second: NicePng_smiley-logo-png_2627114_18
+  - first:
+      213: -6089514745369590299
+    second: NicePng_smiley-logo-png_2627114_19
+  - first:
+      213: -338831373936990296
+    second: NicePng_smiley-logo-png_2627114_20
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: NicePng_smiley-logo-png_2627114_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 538
+        width: 147
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe11d35efc1a990d0800000000000000
+      internalID: -3415520928107523601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NicePng_smiley-logo-png_2627114_1
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 538
+        width: 148
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb0d62efbced9c740800000000000000
+      internalID: 5172910614735409340
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NicePng_smiley-logo-png_2627114_2
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 538
+        width: 148
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0815ce1d149eb70b0800000000000000
+      internalID: -5729729631994752640
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NicePng_smiley-logo-png_2627114_3
+      rect:
+        serializedVersion: 2
+        x: 530
+        y: 533
+        width: 148
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0a41634af887c8f0800000000000000
+      internalID: -520296623484351986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NicePng_smiley-logo-png_2627114_4
+      rect:
+        serializedVersion: 2
+        x: 702
+        y: 533
+        width: 147
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 68ab5c7e3fe68dc40800000000000000
+      internalID: 5537297735696628358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NicePng_smiley-logo-png_2627114_5
+      rect:
+        serializedVersion: 2
+        x: 873
+        y: 533
+        width: 148
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 873f7ca9d41954270800000000000000
+      internalID: 8234147256212124536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NicePng_smiley-logo-png_2627114_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 358
+        width: 147
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62fabe48b15f57170800000000000000
+      internalID: 8175710197103963942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NicePng_smiley-logo-png_2627114_7
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 358
+        width: 148
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f746130e15d2c3de0800000000000000
+      internalID: -1352155958441057153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NicePng_smiley-logo-png_2627114_8
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 358
+        width: 148
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f98fe904f7c97ede0800000000000000
+      internalID: -1303901496741529441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NicePng_smiley-logo-png_2627114_9
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 348
+        width: 148
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c18abe133c417dc0800000000000000
+      internalID: -3643046841123438136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NicePng_smiley-logo-png_2627114_10
+      rect:
+        serializedVersion: 2
+        x: 706
+        y: 348
+        width: 148
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b452347d70e33fc0800000000000000
+      internalID: -3516220054621236043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NicePng_smiley-logo-png_2627114_11
+      rect:
+        serializedVersion: 2
+        x: 877
+        y: 349
+        width: 147
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9872889f46d35c530800000000000000
+      internalID: 3874570558314653577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NicePng_smiley-logo-png_2627114_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 179
+        width: 147
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 97ebc7969189f0ce0800000000000000
+      internalID: -1436762521196511623
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NicePng_smiley-logo-png_2627114_13
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 179
+        width: 148
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db01c5a11474633e0800000000000000
+      internalID: -2074392233416847171
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NicePng_smiley-logo-png_2627114_14
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 179
+        width: 148
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 597e6f1749a3646d0800000000000000
+      internalID: -3006651291981650027
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NicePng_smiley-logo-png_2627114_15
+      rect:
+        serializedVersion: 2
+        x: 532
+        y: 164
+        width: 148
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2425df5e507059c20800000000000000
+      internalID: 3212481631113531970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NicePng_smiley-logo-png_2627114_16
+      rect:
+        serializedVersion: 2
+        x: 703
+        y: 163
+        width: 148
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74535cfda37bda8b0800000000000000
+      internalID: -5139250136269638329
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NicePng_smiley-logo-png_2627114_17
+      rect:
+        serializedVersion: 2
+        x: 874
+        y: 165
+        width: 147
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f15f067ad070aa670800000000000000
+      internalID: 8550654597740426527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NicePng_smiley-logo-png_2627114_18
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 147
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6add4614b02734280800000000000000
+      internalID: -9060272632671969882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NicePng_smiley-logo-png_2627114_19
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 0
+        width: 148
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5e50ebb4a92bd7ba0800000000000000
+      internalID: -6089514745369590299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NicePng_smiley-logo-png_2627114_20
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 0
+        width: 148
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a76abd19aa3c4bf0800000000000000
+      internalID: -338831373936990296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
