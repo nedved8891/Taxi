@@ -8,7 +8,7 @@ public class GameController : MonoBehaviour
 {
     public static event Action<float> OnCarStoped;
     
-    public static event Action OnCarMoved;
+    public static event Action<float> OnGameOver;
     
     public GameObject car;
 
@@ -23,35 +23,39 @@ public class GameController : MonoBehaviour
     private void OnEnable()
     {
         DialogueManager.OnVisibleDialog += Pause;
-
-        BttnFreeController.OnStopCar += Stop;
-        
-        UIGameOverController.OnGoNext += Next;
-        
-        UIGameOverController.OnStopCar += Pause;
         
         DialogueManager.OnResumeMoveCar += Resume;
         
         DialogueManager.OnPauseCar += Pause;
         
+        DialogueManager.OnCompleteDialog += CompleteDialog;
+        
+        UIGameOverController.OnGoNext += Next;
+        
+        UIGameOverController.OnStopCar += Pause;
+        
         CameraController.OnResumeMoveCar += Resume;
+        
+        BttnFreeController.OnStopCar += Stop;
     }
 
     private void OnDisable()
     {
         DialogueManager.OnVisibleDialog -= Pause;
         
-        BttnFreeController.OnStopCar -= Stop;
+        DialogueManager.OnResumeMoveCar -= Resume;
+        
+        DialogueManager.OnPauseCar -= Pause;
+        
+        DialogueManager.OnCompleteDialog -= CompleteDialog;
         
         UIGameOverController.OnGoNext -= Next;
         
         UIGameOverController.OnStopCar -= Pause;
         
-        DialogueManager.OnResumeMoveCar -= Resume;
-        
-        DialogueManager.OnPauseCar -= Pause;
-        
         CameraController.OnResumeMoveCar -= Resume;
+        
+        BttnFreeController.OnStopCar -= Stop;
     }
 
     private void Awake()
@@ -71,6 +75,11 @@ public class GameController : MonoBehaviour
     {
         car.transform.DOLocalRotate(points[waypointIndex].localRotation.eulerAngles, 0.7f)
             .SetEase(Ease.Linear);
+    }
+
+    private void CompleteDialog()
+    {
+        OnGameOver?.Invoke(0.75f);
     }
 
     private void Next()
@@ -108,8 +117,6 @@ public class GameController : MonoBehaviour
         if (!twn.IsPlaying())
         {
             twn.Play();
-            
-            OnCarMoved?.Invoke();
         }
     }
     

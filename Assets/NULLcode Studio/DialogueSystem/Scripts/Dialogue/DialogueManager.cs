@@ -27,10 +27,11 @@ public class DialogueManager : MonoBehaviour
 	
 	public static event Action<bool> OnVisibleDialog;
 	
-	public static event Action<int> OnShowStatusAnswer;
+	public static event Action OnCompleteDialog;
 	
 	public static event Action<int> OnSelectAnswer;
-	public static event Action<int> OnClearSelectAnswer;
+	
+	public static event Action<int> OnClearSelectAnswer;//Повертаєм колір після показу правильності відповіді
 	
 	public static event Action OnResumeMoveCar;
 	
@@ -200,6 +201,8 @@ public class DialogueManager : MonoBehaviour
 			scrollRect.gameObject.SetActive(false);
 			
 			OnPauseCar?.Invoke(1.0f);
+			
+			OnCompleteDialog?.Invoke();
 		});
 	}
 
@@ -282,6 +285,8 @@ public class DialogueManager : MonoBehaviour
 			OnClearSelectAnswer?.Invoke(id);
 			
 			scrollRect.gameObject.SetActive(false);
+			
+			OnCompleteDialog?.Invoke();
 		});
 	}
 
@@ -315,8 +320,6 @@ public class DialogueManager : MonoBehaviour
 			});
 		}).OnStart(() =>
 		{
-			OnShowStatusAnswer?.Invoke(id);
-			
 			OnSelectAnswer?.Invoke(id);
 		});
 	}
