@@ -11,7 +11,7 @@ public class SliderController : MonoBehaviour
     
     public static event Action<int> OnChange;
     
-    public static event Action<bool> OnChangeBool;
+    public static event Action<AnswerStatus> OnChangeBool;
     
     [Header("На скільки змінюється")]
     public float offset = 0.25f;
@@ -59,21 +59,24 @@ public class SliderController : MonoBehaviour
 
     private void Activate(bool value)
     {
-        DOVirtual.DelayedCall(1, () =>
+        DOVirtual.DelayedCall(0, () =>
         {
             _slider.gameObject.SetActive(value);
         });
     }
 
-    private void Change(bool value)
+    private void Change(AnswerStatus value)
     {
-        _slider.DOValue(_slider.value + offset * (value? -1 : 1), 0.3f).OnComplete(()=>
+        if(value == AnswerStatus.None)
+            return;
+        
+        _slider.DOValue(_slider.value + offset * (value == AnswerStatus.Good? -1 : 1), 0.3f).OnComplete(()=>
         {
             var index = CheckHandle();
             
             OnChange?.Invoke(index);;
             
-            OnChangeBool?.Invoke(!value);
+            OnChangeBool?.Invoke(value);
 
             if (_slider.value == 0 || _slider.value == 1)
             {

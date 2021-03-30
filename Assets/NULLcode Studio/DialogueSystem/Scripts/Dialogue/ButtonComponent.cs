@@ -14,13 +14,15 @@ public class ButtonComponent : MonoBehaviour
 	public TextMeshProUGUI textMesh;
 	public RectTransform rect;
 
-	public bool status;
+	public AnswerStatus status;
 
 	public Image img;
 	
 	public Color colorGood;
 
 	public Color colorBad;
+	
+	public Color colorNone = Color.yellow;
 
 	private Color defaultColor;
 	
@@ -51,7 +53,7 @@ public class ButtonComponent : MonoBehaviour
 		if (button.interactable)
 		{
 			defaultColor = img.color;
-			img.color = status ? colorGood : colorBad;
+			img.color = status == AnswerStatus.None? colorNone : status == AnswerStatus.Good ? colorGood : colorBad;
 		}
 	}
 

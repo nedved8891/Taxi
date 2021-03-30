@@ -14,7 +14,7 @@ public class TestScene : MonoBehaviour {
 				DialogueTrigger tr = hit.transform.GetComponent<DialogueTrigger>();
 				if(tr != null && tr.fileName != string.Empty)
 				{
-					DialogueManager.Internal.DialogueStart(tr.fileName);
+					//DialogueManager.Internal.DialogueStart(tr.fileName);
 				}
 			}
 

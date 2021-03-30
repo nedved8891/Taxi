@@ -1,10 +1,27 @@
 <dialogue name="Taxi_2">
   <node id="0" npcText="My friend, I’m afraid this is a kidnapping! &lt;sprite=0&gt; &lt;sprite=0&gt; &lt;sprite=0&gt;">
-    <answer text="Does that mean you don’t have to pay?" toNode="1" status="True" />
-    <answer text="WTF. I will call the Police!" toNode="1" status="False" />
+    <answer text="Does that mean you don’t have to pay?" exit="False" toNode="1" status="True" />
+    <answer text="WTF. I will call the Police!" exit="False" toNode="2" status="False" />
   </node>
   <node id="1" npcText="Eeer, I guess so!">
-    <answer text="Whoo Hooo!" exit="True" status="True" />
-    <answer text="It means no tip??? &lt;sprite=11&gt;" exit="True" status="False" />
+    <answer text="Whoo Hooo!" eexit="False" toNode="2" status="True" />
+    <answer text="It means no tip?" exit="False" toNode="2" status="False" />
+  </node>
+  <node id="2" npcText="It's a joke Bro, here is your tips! ">
+    <answer text="" exit="True" status="True" />
+    <answer text="" exit="True" status="False" />
+  </node>
+  
+  <node id="3" npcText="It's a joke Bro, here is your tips! ">
+    <answer text="" exit="True" status="True" />
+    <answer text="" exit="True" status="False" />
+  </node>
+  <node id="2" npcText="I wouldn't recommend you to do so!">
+    <answer text="Ok, let's talk about boobs" exit="True" status="True" />
+    <answer text="Get our of my car dude!" exit="True" status="False" />
+  </node>
+  <node id="3" npcText="I wouldn't recommend you to do so!">
+    <answer text="Ok, let's talk about boobs" exit="True" status="True" />
+    <answer text="Get our of my car dude!" exit="True" status="False" />
   </node>
 </dialogue>

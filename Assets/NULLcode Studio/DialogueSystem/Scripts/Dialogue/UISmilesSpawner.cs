@@ -11,7 +11,7 @@ public class UISmilesSpawner : MonoBehaviour
    
    public Transform pos;
 
-   private bool isGoodAnswer;
+   private AnswerStatus isGoodAnswer;
    
    private void OnEnable()
    {
@@ -27,12 +27,12 @@ public class UISmilesSpawner : MonoBehaviour
        PersonagesAnimator.OnPassengerReaction -= ReceivedAnswer;
    }
 
-   private void CheckAnswer(bool value)
+   private void CheckAnswer(AnswerStatus value)
    {
        isGoodAnswer = value;
    }
 
-   private void ReceivedAnswer(bool value)
+   private void ReceivedAnswer(AnswerStatus value)
    {
        var sm =  Instantiate (prefab, pos.position, Quaternion.identity, parent);
 
