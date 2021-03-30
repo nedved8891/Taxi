@@ -28,9 +28,15 @@ public class DialogueGenerator : MonoBehaviour {
 		for(int j = 0; j < node.Length; j++)
 		{
 			userNode = xmlDoc.CreateElement("node");
+			
 			attribute = xmlDoc.CreateAttribute("id");
 			attribute.Value = j.ToString();
 			userNode.Attributes.Append(attribute);
+			
+			attribute = xmlDoc.CreateAttribute("result");
+			attribute.Value = node[j].result.ToString();
+			userNode.Attributes.Append(attribute);
+			
 			attribute = xmlDoc.CreateAttribute("npcText");
 			attribute.Value = node[j].npcText;
 			userNode.Attributes.Append(attribute);
@@ -89,6 +95,8 @@ public class DialogueNode
 {
 	public string npcText;
 	
+	public ResultStatus result;
+	
 	public PlayerAnswer[] playerAnswer;
 }
 
@@ -102,7 +110,7 @@ public class PlayerAnswer
 	public bool exit;
 	
 	[Tooltip("Этот ответ хороший?")]
-	public bool status;
+	public AnswerStatus status;
 
 	[Tooltip("Переход на другой узел диалога.")]
 	public int toNode;
@@ -118,4 +126,20 @@ public class PlayerAnswer
 
 	//[Tooltip("Взять квест = '1', Отказаться от квеста = '2', Сдать квест = '3', Неактивно = '0'")]
 	//[Range(0, 3)] public int questStatus;
+}
+
+[System.Serializable]
+public enum AnswerStatus
+{
+	None,
+	Good,
+	Bad,
+}
+
+[System.Serializable]
+public enum ResultStatus
+{
+	None,
+	Complete,
+	Fail,
 }

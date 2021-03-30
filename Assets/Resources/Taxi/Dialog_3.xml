@@ -1,0 +1,16 @@
+<dialogue name="Dialog_3">
+  <node id="0" result="None" npcText="I'm being tailed! Let's go faster!">
+    <answer text="Did you smoke something?" toNode="1" status="Bad" />
+    <answer text="Yes, Sir!" toNode="2" status="Good" />
+  </node>
+  <node id="1" result="None" npcText="I'm serious. Her husband is following me.">
+    <answer text="Ha-ha. And where is your clothing?" toNode="3" status="None" />
+    <answer text="Wow, family drama. Will do my best!" toNode="4" status="None" />
+  </node>
+  <node id="2" result="None" npcText="We loose him?">
+    <answer text="Hey man, we still stand on the same place." toNode="1" status="Bad" />
+    <answer text="I guess so." toNode="1" status="Bad" />
+  </node>
+  <node id="3" result="Fail" npcText="Too much questions, he will kill me!" />
+  <node id="4" result="Complete" npcText="Thanks Bro! You will save my balls!" />
+</dialogue>

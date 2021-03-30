@@ -18,21 +18,23 @@ public class UIGameOverController : MonoBehaviour
     
     private void OnEnable()
     {
-        SliderController.OnGameOver += Show;
+        GameController.OnGameOver += Show;
     }
 
     private void OnDisable()
     {
-        SliderController.OnGameOver -= Show;
+        GameController.OnGameOver -= Show;
     }
 
-    private void Show(bool value)
+    private void Show(float delay)
     {
-        DOVirtual.DelayedCall(0f, () =>
+        var result = (int)SliderController.currentResult;
+        
+        DOVirtual.DelayedCall(delay, () =>
         {
             fade.SetActive(true);
-            complete.SetActive(value);
-            faile.SetActive(!value);
+            complete.SetActive(result >= 0);
+            faile.SetActive(result < 0);
             
             OnStopCar?.Invoke(false);
         });

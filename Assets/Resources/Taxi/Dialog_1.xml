@@ -1,0 +1,24 @@
+<dialogue name="Dialog_1">
+  <node id="0" result="None" npcText="My friend, I’m afraid this is a kidnapping.">
+    <answer text="Does that mean you don’t have to pay?" toNode="1" status="Good" />
+    <answer text="WTF. I will call the Police!" toNode="3" status="Bad" />
+  </node>
+  <node id="1" result="None" npcText="Eeer, I guess so!">
+    <answer text="Whoo Hooo!" toNode="5" status="None" />
+    <answer text="It means no tip???" toNode="2" status="None" />
+  </node>
+  <node id="2" result="None" npcText="Are you kidding, this is a kidnapping!">
+    <answer text="Ok, ok, I got it!" toNode="5" status="Good" />
+    <answer text="Ok, I promise not to fart in my cab." toNode="5" status="None" />
+  </node>
+  <node id="3" result="None" npcText=" I wouldn't recommend you to do so!">
+    <answer text="Ok, let's talk about boobs." toNode="4" status="None" />
+    <answer text="Get our of my car dude!" exit="True" status="Bad" />
+  </node>
+  <node id="4" result="None" npcText="Do you prefer fake or real ones?">
+    <answer text="Hmmm, I like both" toNode="5" status="None" />
+    <answer text="It depends on the size" toNode="5" status="None" />
+  </node>
+  <node id="5" result="Complete" npcText="It's a joke Bro, here is your tips!">
+  </node>
+</dialogue>

@@ -9,10 +9,6 @@ public class SliderController : MonoBehaviour
 {
     public static event Action<bool> OnGameOver;
     
-    public static event Action<int> OnChange;
-    
-    public static event Action<bool> OnChangeBool;
-    
     [Header("На скільки змінюється")]
     public float offset = 0.25f;
 
@@ -25,6 +21,8 @@ public class SliderController : MonoBehaviour
     [Header("Слайдер")]
     public Slider _slider;
 
+    public static TResults currentResult;
+    
     private void OnEnable()
     {
         UISmilesController.OnChangeSlider += Change;
@@ -59,55 +57,68 @@ public class SliderController : MonoBehaviour
 
     private void Activate(bool value)
     {
-        DOVirtual.DelayedCall(1, () =>
+        DOVirtual.DelayedCall(0, () =>
         {
             _slider.gameObject.SetActive(value);
         });
     }
 
-    private void Change(bool value)
+    private void Change(AnswerStatus value)
     {
-        _slider.DOValue(_slider.value + offset * (value? -1 : 1), 0.3f).OnComplete(()=>
-        {
-            var index = CheckHandle();
-            
-            OnChange?.Invoke(index);;
-            
-            OnChangeBool?.Invoke(!value);
-
-            if (_slider.value == 0 || _slider.value == 1)
+        if(value == AnswerStatus.None)
+            return;
+        
+        _slider.DOValue(_slider.value + offset * (value == AnswerStatus.Good? -1 : 1), 0.3f)
+            .OnComplete(()=>
             {
-                DOVirtual.DelayedCall(0.0f, () =>
+                var index = CheckHandle();
+                
+                if (_slider.value == 0 || _slider.value == 1)
                 {
-                    OnGameOver?.Invoke(_slider.value == 0);
-                });
-            }
-        });
+                    DOVirtual.DelayedCall(0.0f, () =>
+                    {
+                        //OnGameOver?.Invoke(_slider.value == 0);
+                    });
+                }
+            });
     }
 
     private int CheckHandle()
     {
         var indx = 0;
+        currentResult = TResults.Perfect;
         switch (_slider.value)
         {
             case 0.25f:
-                indx = 1;;
+                indx = 1;
+                currentResult = TResults.Good;
                 break;
             case 0.5f:
-                indx = 2;;
+                indx = 2;
+                currentResult = TResults.Normal;
                 break;
             case 0.75f:
-                indx = 3;;
+                indx = 3;
+                currentResult = TResults.Bad;
                 break;
             case 1f:
                 indx = 4;
+                currentResult = TResults.Poor;
                 break;
         }
         
         handle.sprite = icons[indx];
 
-        Debug.Log("indx: " + indx);
-
         return indx;
     }
+}
+
+[System.Serializable]
+public enum TResults
+{
+    Perfect = 2,
+    Good = 1,
+    Normal = 0,
+    Bad = -1,
+    Poor = -2,
 }

@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 
 public class UISmilesController : MonoBehaviour
 {
-   public static event Action<bool> OnChangeSlider;
+   public static event Action<AnswerStatus> OnChangeSlider;
    
    public List<Transform> smiles;
 
@@ -16,13 +16,13 @@ public class UISmilesController : MonoBehaviour
    
    private Sprite type;
    
-   private bool isGoodAnswer;
+   private AnswerStatus isGoodAnswer;
    
-   public void Init(bool value, bool isGood)
+   public void Init(AnswerStatus value, AnswerStatus isGood)
    {
       isGoodAnswer = isGood;
       
-      type = value? sprites[0] : sprites[1];
+      type = value == AnswerStatus.None? sprites[2] : value == AnswerStatus.Good?  sprites[1] : sprites[0];
 
       StartCoroutine(ExampleCoroutine());
    }

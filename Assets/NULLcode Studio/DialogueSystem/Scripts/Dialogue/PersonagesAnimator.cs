@@ -6,11 +6,11 @@ using UnityEngine;
 
 public class PersonagesAnimator : MonoBehaviour
 {
-   public static event Action<bool> OnPassengerReaction;
+   public static event Action<AnswerStatus> OnPassengerReaction;
    
    private Animator _animator;
 
-   private bool reaction;
+   private AnswerStatus reaction;
    
    private void OnEnable()
    {
@@ -37,11 +37,11 @@ public class PersonagesAnimator : MonoBehaviour
 
       DOVirtual.DelayedCall(1.5f, () =>
       {
-         OnPassengerReaction?.Invoke(!reaction);
+         OnPassengerReaction?.Invoke(reaction);
       });
    }
 
-   private void Change(bool value)
+   private void Change(AnswerStatus value)
    {
       reaction = value;
    }

@@ -8,18 +8,37 @@ using System.Xml;
 using System.IO;
 using DG.Tweening;
 
+[System.Serializable]
+public enum NDialogs
+{
+	None,
+	Dialog_1,
+	Dialog_2,
+	Dialog_3,
+	Dialog_4,
+	Taxi_1,
+	Taxi_2,
+	Taxi_3,
+}
+
 public class DialogueManager : MonoBehaviour
 {
-	public static event Action<bool> OnReceivedAnswer;
+	public static event Action<AnswerStatus> OnReceivedAnswer;
 	
 	public static event Action<bool> OnVisibleDialog;
 	
-	public static event Action<int> OnShowStatusAnswer;
+	public static event Action OnCompleteDialog;
 	
 	public static event Action<int> OnSelectAnswer;
-	public static event Action<int> OnClearSelectAnswer;
 	
-	public static event Action<bool> OnStopCar;
+	public static event Action<int> OnClearSelectAnswer;//Повертаєм колір після показу правильності відповіді
+	
+	public static event Action OnResumeMoveCar;
+	
+	public static event Action<float> OnPauseCar;
+	
+	[Header("Діалог")]
+	public NDialogs dialogName;
 	
 	public ScrollRect scrollRect;
 	public ButtonComponent[] buttonText; // первый элемент списка, всегда будет использоваться для вывода текста NPC, остальные элементы для ответов, соответственно, общее их количество должно быть достаточным
@@ -35,21 +54,33 @@ public class DialogueManager : MonoBehaviour
 	private int id;
 	private static bool _active;
 
-	public void DialogueStart(string name)
+	private void OnEnable()
 	{
-		if(name == string.Empty) return;
+		CameraController.OnStartDialog += DialogueStart;
+	}
+
+	private void OnDisable()
+	{
+		CameraController.OnStartDialog -= DialogueStart;
+	}
+
+	private void DialogueStart(int delay = 0)
+	{
+		if(dialogName == NDialogs.None) return;
 		
 		OnVisibleDialog?.Invoke(true);
 		
-		OnStopCar?.Invoke(true);
+		//OnStopCar?.Invoke(1);
 
-		DOVirtual.DelayedCall(1, () =>
+		DOVirtual.DelayedCall(delay, () =>
 		{
 			scrollRect.gameObject.SetActive(true);
 		
-			fileName = name;
+			fileName = dialogName.ToString();
 		
 			Load();
+			
+			OnResumeMoveCar?.Invoke();
 		});
 	}
 
@@ -103,7 +134,7 @@ public class DialogueManager : MonoBehaviour
 						answer.text = reader.GetAttribute("text");
 						answer.toNode = GetINT(reader.GetAttribute("toNode"));
 						answer.exit = GetBOOL(reader.GetAttribute("exit"));
-						answer.status = GetBOOL(reader.GetAttribute("status"));
+						answer.status = reader.GetAttribute("status") == global::AnswerStatus.None.ToString()? global::AnswerStatus.None : reader.GetAttribute("status") == global::AnswerStatus.Good.ToString()? global::AnswerStatus.Good : global::AnswerStatus.Bad;
 						answer.questStatus = GetINT(reader.GetAttribute("questStatus"));
 						answer.questValue = GetINT(reader.GetAttribute("questValue"));
 						answer.questValueGreater = GetINT(reader.GetAttribute("questValueGreater"));
@@ -129,8 +160,9 @@ public class DialogueManager : MonoBehaviour
 		BuildDialogue(0);
 	}
 
-	private void AddToList(bool exit, int toNode, string text, int questStatus, string questName, bool isActive, bool answerStatus)
+	private void AddToList(bool exit, int toNode, string text, int questStatus, string questName, bool isActive, AnswerStatus answerStatus)
 	{
+		buttonText[id].gameObject.SetActive(true);
 		buttonText[id].text.text = text;
 		buttonText[id].textMesh.text = text;
 		buttonText[id].rect.sizeDelta = new Vector2(buttonText[id].rect.sizeDelta.x, buttonText[id].text.preferredHeight + offset);
@@ -149,13 +181,29 @@ public class DialogueManager : MonoBehaviour
 			if(questStatus != 0) SetQuestStatus(buttonText[id].button, questStatus, questName);
 		}
 
-		if(isActive)
+		if (isActive)
 			SetAnswerStatus(buttonText[id].button, answerStatus);
-
+		
 		id++;
 
 		curY += height + offset;
 		RectContent();
+	}
+
+	private void SetEndedDialog(float delay)
+	{
+		DOVirtual.DelayedCall(delay, () =>
+		{
+			_active = false;
+		
+			OnClearSelectAnswer?.Invoke(id);
+			
+			scrollRect.gameObject.SetActive(false);
+			
+			OnPauseCar?.Invoke(1.0f);
+			
+			OnCompleteDialog?.Invoke();
+		});
 	}
 
 	private void RectContent()
@@ -174,6 +222,7 @@ public class DialogueManager : MonoBehaviour
 			b.rect.sizeDelta = new Vector2(b.rect.sizeDelta.x, 0);
 			b.rect.anchoredPosition = new Vector2(b.rect.anchoredPosition.x, 0);
 			b.button.onClick.RemoveAllListeners();
+			b.gameObject.SetActive(false);
 		}
 		RectContent();
 	}
@@ -194,14 +243,14 @@ public class DialogueManager : MonoBehaviour
 		button.onClick.AddListener(() => CloseWindow(button.gameObject.GetInstanceID()));
 	}
 
-	private void SetAnswerStatus(Button button, bool value) // событие, для управлением статуса, текущего квеста
+	private void SetAnswerStatus(Button button, AnswerStatus value) // событие, для управлением статуса, текущего квеста
 	{
 		button.onClick.AddListener(() => AnswerStatus(value));
 
 		button.gameObject.GetComponent<ButtonComponent>().status = value;
 	}
 
-	private void AnswerStatus(bool value)
+	private void AnswerStatus(AnswerStatus value)
 	{
 		OnReceivedAnswer?.Invoke(value);
 	}
@@ -237,7 +286,7 @@ public class DialogueManager : MonoBehaviour
 			
 			scrollRect.gameObject.SetActive(false);
 			
-			//OnVisibleDialog?.Invoke(false);
+			OnCompleteDialog?.Invoke();
 		});
 	}
 
@@ -271,8 +320,6 @@ public class DialogueManager : MonoBehaviour
 			});
 		}).OnStart(() =>
 		{
-			OnShowStatusAnswer?.Invoke(id);
-			
 			OnSelectAnswer?.Invoke(id);
 		});
 	}
@@ -289,18 +336,27 @@ public class DialogueManager : MonoBehaviour
 			return;
 		}
 
-		AddToList(false, 0, node[j].npcText, 0, string.Empty, false, false); // добавление текста NPC
+		AddToList(false, 0, node[j].npcText, 0, string.Empty, false, global::AnswerStatus.None); // добавление текста NPC
 
-		for(var i = 0; i < node[j].answer.Count; i++)
+		if (node[j].answer.Count > 0)
 		{
-			var value = QuestManager.GetCurrentValue(node[j].answer[i].questName);
-			// фильтр ответов, относительно текущего статуса квеста
-			if(value >= node[j].answer[i].questValueGreater && node[j].answer[i].questValueGreater != 0 || 
-			   node[j].answer[i].questValue == value && node[j].answer[i].questValueGreater == 0 || 
-			   node[j].answer[i].questName == null)
+			for (var i = 0; i < node[j].answer.Count; i++)
 			{
-				AddToList(node[j].answer[i].exit, node[j].answer[i].toNode, node[j].answer[i].text, node[j].answer[i].questStatus, node[j].answer[i].questName, true, node[j].answer[i].status); // текст игрока
+				var value = QuestManager.GetCurrentValue(node[j].answer[i].questName);
+				// фильтр ответов, относительно текущего статуса квеста
+				if (value >= node[j].answer[i].questValueGreater && node[j].answer[i].questValueGreater != 0 ||
+				    node[j].answer[i].questValue == value && node[j].answer[i].questValueGreater == 0 ||
+				    node[j].answer[i].questName == null)
+				{
+					AddToList(node[j].answer[i].exit, node[j].answer[i].toNode, node[j].answer[i].text,
+						node[j].answer[i].questStatus, node[j].answer[i].questName, true,
+						node[j].answer[i].status); // текст игрока
+				}
 			}
+		}
+		else
+		{
+			SetEndedDialog(2);
 		}
 
 		EventSystem.current.SetSelectedGameObject(scrollRect.gameObject); // выбор окна диалога как активного, чтобы снять выделение с кнопок диалога
@@ -331,6 +387,7 @@ internal class Dialogue
 {
 	public int id;
 	public string npcText;
+	public ResultStatus result;
 	public List<Answer> answer;
 }
 
@@ -340,5 +397,5 @@ internal class Answer
 	public string text, questName;
 	public int toNode, questValue, questValueGreater, questStatus;
 	public bool exit;
-	public bool status;
+	public AnswerStatus status;
 }
