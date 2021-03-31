@@ -10,6 +10,8 @@ public class GameController : MonoBehaviour
     
     public static event Action<float> OnGameOver;
     
+    public static event Action<float> OnCloseDialog;
+    
     public GameObject car;
 
     public List<Transform> points;
@@ -30,11 +32,13 @@ public class GameController : MonoBehaviour
         
         DialogueManager.OnCompleteDialog += CompleteDialog;
         
-        UIGameOverController.OnGoNext += Next;
+        //UIGameOverController.OnGoNext += Next;
         
         UIGameOverController.OnStopCar += Pause;
         
         CameraController.OnResumeMoveCar += Resume;
+        
+        CameraController.OnBoardingPassengerOutCar += GameOver;
         
         BttnFreeController.OnStopCar += Stop;
     }
@@ -49,11 +53,13 @@ public class GameController : MonoBehaviour
         
         DialogueManager.OnCompleteDialog -= CompleteDialog;
         
-        UIGameOverController.OnGoNext -= Next;
+        //UIGameOverController.OnGoNext -= Next;
         
         UIGameOverController.OnStopCar -= Pause;
         
         CameraController.OnResumeMoveCar -= Resume;
+        
+        CameraController.OnBoardingPassengerOutCar -= GameOver;
         
         BttnFreeController.OnStopCar -= Stop;
     }
@@ -79,8 +85,22 @@ public class GameController : MonoBehaviour
 
     private void CompleteDialog()
     {
-        OnGameOver?.Invoke(0.75f);
+        //OnGameOver?.Invoke(0.75f);
+
+        if (twn.IsPlaying())
+        {
+            twn.Pause();
+        
+            OnCloseDialog?.Invoke(0.75f);
+        }
+    } 
+    
+    private void GameOver(float delay)
+    {
+        OnGameOver?.Invoke(delay);
     }
+    
+    
 
     private void Next()
     {
@@ -99,7 +119,7 @@ public class GameController : MonoBehaviour
             .OnWaypointChange(Callback);
     }
     
-    private void Stop(int delay)
+    private void Stop(float delay)
     {
         DOVirtual.DelayedCall(delay, () =>
         {

@@ -10,7 +10,8 @@ public enum TPoints
    None,
    Movement,
    Dialog,
-   BoardingPassenger
+   BoardingPassengerInCar,
+   BoardingPassengerOutCar
 }
 
 public class CameraController : MonoBehaviour
@@ -18,6 +19,10 @@ public class CameraController : MonoBehaviour
    public static event Action<int> OnStartDialog;
    
    public static event Action OnResumeMoveCar;
+   
+   public static event Action<float> OnBoardingPassengerOutCar;
+
+   public float speed = 0.5f;
    
    public Transform startPoint;
 
@@ -32,11 +37,19 @@ public class CameraController : MonoBehaviour
    private void OnEnable()
    {
       GameController.OnCarStoped += StopCar;
+
+      GameController.OnCloseDialog += CloseDialog;
+
+      UIGameOverController.OnGoNext += Restart;
    }
 
    private void OnDisable()
    {
       GameController.OnCarStoped -= StopCar;
+
+      GameController.OnCloseDialog -= CloseDialog;
+      
+      UIGameOverController.OnGoNext -= Restart;
    }
 
    private void Awake()
@@ -46,11 +59,24 @@ public class CameraController : MonoBehaviour
       _transform = _camera.gameObject.transform;
    }
 
+   private void Restart()
+   {
+      Change(TPoints.Movement);
+   }
+
    private void StopCar(float delay)
    {
       DOVirtual.DelayedCall(delay + 1, () =>
       {
-         Change(TPoints.BoardingPassenger);
+         Change(TPoints.BoardingPassengerInCar);
+      });
+   }
+   
+   private void CloseDialog(float delay)
+   {
+      DOVirtual.DelayedCall(delay + 1, () =>
+      {
+         Change(TPoints.BoardingPassengerOutCar);
       });
    }
 
@@ -59,28 +85,40 @@ public class CameraController : MonoBehaviour
       switch (tpoint)
       {
          case TPoints.Movement:
-            _transform.DOMove(startPoint.position, 1).OnStart(() =>
+            _transform.DOMove(startPoint.position, speed).OnStart(() =>
             {
-               _transform.DORotate(startPoint.eulerAngles, 1);
+               _transform.DORotate(startPoint.eulerAngles, speed);
             }).OnComplete(() =>
             {
                OnResumeMoveCar?.Invoke();
             });
             break;
          case TPoints.Dialog:
-            _transform.DOMove(dialogPoint.position, 1).OnStart(() =>
+            _transform.DOMove(dialogPoint.position, speed).OnStart(() =>
             {
-               _transform.DORotate(dialogPoint.eulerAngles, 1);
+               _transform.DORotate(dialogPoint.eulerAngles, speed);
             }).OnComplete(() =>
             {
                OnStartDialog?.Invoke(0);
             });
             break;
-         case TPoints.BoardingPassenger:
-            _transform.DOMove(endPoint.position, 1).OnStart(() =>
+         case TPoints.BoardingPassengerInCar:
+            _transform.DOMove(endPoint.position, speed).OnStart(() =>
             {
-               _transform.DORotate(endPoint.eulerAngles, 1);
-            });;
+               _transform.DORotate(endPoint.eulerAngles, speed);
+            }).OnComplete(() =>
+            {
+               Change(TPoints.Dialog); // поки тут
+            });
+            break;
+         case TPoints.BoardingPassengerOutCar:
+            _transform.DOMove(endPoint.position, speed).OnStart(() =>
+            {
+               _transform.DORotate(endPoint.eulerAngles, speed);
+            }).OnComplete(() =>
+            {
+               OnBoardingPassengerOutCar?.Invoke(1);
+            });
             break;
       }
    }
@@ -97,7 +135,7 @@ public class CameraController : MonoBehaviour
       }
       if (Input.GetKeyDown(KeyCode.S))
       {
-         Change(TPoints.BoardingPassenger);
+         Change(TPoints.BoardingPassengerInCar);
       }
    }
 }

@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class BttnFreeController : MonoBehaviour
 {
-    public static event Action<int> OnStopCar;
+    public static event Action<float> OnStopCar;
     
     public GameObject bttn;
     

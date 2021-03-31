@@ -4,12 +4,12 @@
     <answer text="Are you talking to me?" toNode="3" status="Good" />
   </node>
   <node id="1" result="None" npcText="It's not for you sick puppy. I'm talking to my boyfriend.">
-    <answer text="I know, I could not  be so lucky." toNode="2" status="Good" />
+    <answer text="I know, I could not  be so lucky. &lt;sprite=6&gt;" toNode="2" status="Good" />
     <answer text="Maybe he is too drunk for this?" exit="True" status="Bad" />
   </node>
   <node id="2" result="None" npcText="Really? Have you ever done it in your cab?">
     <answer text="Not yet, but I hope to change it tonight!" toNode="4" status="Bad" />
-    <answer text="How do you think my answer should be?" toNode="5" status="Good" />
+    <answer text="How do you think my answer should be? &lt;sprite=6&gt;" toNode="5" status="Good" />
   </node>
   <node id="3" result="None" npcText="Oh, I'm sorry (laughing). I'm talking to my boyfriend.">
     <answer text="I know, I could not  be so lucky" toNode="2" status="Good" />

@@ -11,14 +11,11 @@ using DG.Tweening;
 [System.Serializable]
 public enum NDialogs
 {
-	None,
-	Dialog_1,
-	Dialog_2,
-	Dialog_3,
-	Dialog_4,
-	Taxi_1,
-	Taxi_2,
-	Taxi_3,
+	None = -1,
+	Dialog_1 = 0,
+	Dialog_2 = 1,
+	Dialog_3 = 2,
+	Dialog_4 = 3,
 }
 
 public class DialogueManager : MonoBehaviour
@@ -40,17 +37,25 @@ public class DialogueManager : MonoBehaviour
 	[Header("Діалог")]
 	public NDialogs dialogName;
 	
+	[Header("Скролл")]
 	public ScrollRect scrollRect;
+	
+	[Header("Кнопки")]
 	public ButtonComponent[] buttonText; // первый элемент списка, всегда будет использоваться для вывода текста NPC, остальные элементы для ответов, соответственно, общее их количество должно быть достаточным
+	
+	[Header("Папка з діалогами")]
 	public string folder = "Taxi"; // подпапка в Resources, для чтения
+	
+	[Header("Зміщення")]
 	public int offset = 20;
 
+	public static DialogueManager _internal;
+	
 	private string fileName, lastName;
 	private List<Dialogue> node;
 	private Dialogue dialogue;
 	private Answer answer;
 	private float curY, height;
-	public static DialogueManager _internal;
 	private int id;
 	private static bool _active;
 
@@ -70,11 +75,11 @@ public class DialogueManager : MonoBehaviour
 		
 		OnVisibleDialog?.Invoke(true);
 		
-		//OnStopCar?.Invoke(1);
-
 		DOVirtual.DelayedCall(delay, () =>
 		{
 			scrollRect.gameObject.SetActive(true);
+
+			dialogName = GetDialogName();
 		
 			fileName = dialogName.ToString();
 		
@@ -97,8 +102,6 @@ public class DialogueManager : MonoBehaviour
 	private void Awake()
 	{
 		_internal = this;
-		
-		//CloseWindow();
 	}
 
 	private void Load()
@@ -163,6 +166,7 @@ public class DialogueManager : MonoBehaviour
 	private void AddToList(bool exit, int toNode, string text, int questStatus, string questName, bool isActive, AnswerStatus answerStatus)
 	{
 		buttonText[id].gameObject.SetActive(true);
+		buttonText[id].ClearSelect(isActive);
 		buttonText[id].text.text = text;
 		buttonText[id].textMesh.text = text;
 		buttonText[id].rect.sizeDelta = new Vector2(buttonText[id].rect.sizeDelta.x, buttonText[id].text.preferredHeight + offset);
@@ -196,7 +200,7 @@ public class DialogueManager : MonoBehaviour
 		{
 			_active = false;
 		
-			OnClearSelectAnswer?.Invoke(id);
+			//OnClearSelectAnswer?.Invoke(id);
 			
 			scrollRect.gameObject.SetActive(false);
 			
@@ -282,7 +286,7 @@ public class DialogueManager : MonoBehaviour
 		
 		DOVirtual.DelayedCall(4f, () =>
 		{
-			OnClearSelectAnswer?.Invoke(id);
+			//OnClearSelectAnswer?.Invoke(id);
 			
 			scrollRect.gameObject.SetActive(false);
 			
@@ -316,7 +320,7 @@ public class DialogueManager : MonoBehaviour
 			{
 				BuildDialogue(current);
 
-				OnClearSelectAnswer?.Invoke(id);
+				//OnClearSelectAnswer?.Invoke(id);
 			});
 		}).OnStart(() =>
 		{
@@ -363,6 +367,21 @@ public class DialogueManager : MonoBehaviour
 		ShowWindow();
 	}
 
+	private NDialogs GetDialogName()
+	{
+		int indx = (int)NDialogs.Dialog_1;
+		
+		if (PlayerPrefs.HasKey("DialogID"))
+		{
+			indx = PlayerPrefs.GetInt("DialogID") == 3 ? 0 : PlayerPrefs.GetInt("DialogID") + 1;
+		}
+		
+		PlayerPrefs.SetInt("DialogID", indx);
+		PlayerPrefs.Save();
+		
+		return (NDialogs)indx;
+	}
+
 	private int GetINT(string text)
 	{
 		if(int.TryParse(text, out var value))
@@ -390,7 +409,6 @@ internal class Dialogue
 	public ResultStatus result;
 	public List<Answer> answer;
 }
-
 
 internal class Answer
 {
