@@ -1,5 +1,5 @@
 <dialogue name="Dialog_1">
-  <node id="0" result="None" npcText="My friend, I’m afraid this is a kidnapping.">
+  <node id="0" result="None" npcText="My friend, I’m afraid this is a kidnapping! &lt;sprite=0&gt; &lt;sprite=0&gt; &lt;sprite=0&gt;">
     <answer text="Does that mean you don’t have to pay?" toNode="1" status="Good" />
     <answer text="WTF. I will call the Police!" toNode="3" status="Bad" />
   </node>
