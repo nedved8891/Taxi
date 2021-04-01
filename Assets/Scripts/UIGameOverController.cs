@@ -8,7 +8,7 @@ public class UIGameOverController : MonoBehaviour
 {
     public static event Action OnGoNext;
     
-    public static event Action<bool> OnStopCar;
+    public static event Action<float> OnStopCar;
     
     public static event Action OnChangeScore;
     
@@ -39,7 +39,8 @@ public class UIGameOverController : MonoBehaviour
             faile.SetActive(result < 0);
             
             OnChangeScore?.Invoke();
-            OnStopCar?.Invoke(false);
+            
+            OnStopCar?.Invoke(1);
         });
     }
     
