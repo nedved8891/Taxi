@@ -10,12 +10,18 @@ public class GameController : MonoBehaviour
     
     public static event Action<float> OnGameOver;
     
+    public static event Action<float> OnCloseDialog;
+    
+    [Header("Автомобіль")]
     public GameObject car;
 
+    [Header("Точки з яких буде складений шлях")]
     public List<Transform> points;
     
+    [Header("Точки шляху")]
     public List<Vector3> path;
 
+    [Header("Швидксть авто")]
     public float speed;
 
     private Tween twn;
@@ -30,11 +36,15 @@ public class GameController : MonoBehaviour
         
         DialogueManager.OnCompleteDialog += CompleteDialog;
         
-        UIGameOverController.OnGoNext += Next;
+        //UIGameOverController.OnGoNext += Next;
         
         UIGameOverController.OnStopCar += Pause;
         
         CameraController.OnResumeMoveCar += Resume;
+        
+        //CameraController.OnBoardingPassengerOutCar += GameOver;
+
+        PassengerController.OnOutCar += GameOver;
         
         BttnFreeController.OnStopCar += Stop;
     }
@@ -49,11 +59,15 @@ public class GameController : MonoBehaviour
         
         DialogueManager.OnCompleteDialog -= CompleteDialog;
         
-        UIGameOverController.OnGoNext -= Next;
+        //UIGameOverController.OnGoNext -= Next;
         
         UIGameOverController.OnStopCar -= Pause;
         
         CameraController.OnResumeMoveCar -= Resume;
+        
+        //CameraController.OnBoardingPassengerOutCar -= GameOver;
+        
+        PassengerController.OnOutCar -= GameOver;
         
         BttnFreeController.OnStopCar -= Stop;
     }
@@ -79,7 +93,19 @@ public class GameController : MonoBehaviour
 
     private void CompleteDialog()
     {
-        OnGameOver?.Invoke(0.75f);
+        //OnGameOver?.Invoke(0.75f);
+
+        if (twn.IsPlaying())
+        {
+            twn.Pause();
+        
+            OnCloseDialog?.Invoke(0.75f);
+        }
+    } 
+    
+    private void GameOver(float delay)
+    {
+        OnGameOver?.Invoke(delay);
     }
 
     private void Next()
@@ -99,7 +125,7 @@ public class GameController : MonoBehaviour
             .OnWaypointChange(Callback);
     }
     
-    private void Stop(int delay)
+    private void Stop(float delay)
     {
         DOVirtual.DelayedCall(delay, () =>
         {

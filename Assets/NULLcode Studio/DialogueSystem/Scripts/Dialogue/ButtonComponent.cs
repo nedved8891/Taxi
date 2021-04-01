@@ -1,9 +1,6 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
-using System.Runtime.InteropServices;
-using System.Runtime.Remoting.Messaging;
 using DG.Tweening;
 using TMPro;
 
@@ -29,43 +26,36 @@ public class ButtonComponent : MonoBehaviour
 	private void Awake()
 	{
 		img = GetComponent<Image>();
+		
+		defaultColor = img.color;
 	}
 
 	private void OnEnable()
 	{
 		DialogueManager.OnSelectAnswer += ChangeColor;
-		
-		DialogueManager.OnClearSelectAnswer += ClearSelect;
 	}
 	
 	private void OnDisable()
 	{
 		DialogueManager.OnSelectAnswer -= ChangeColor;
-		
-		DialogueManager.OnClearSelectAnswer -= ClearSelect;
 	}
 
 	private void ChangeColor(int id)
 	{
+		if(button.interactable)
+			button.interactable = false;
+		
 		if(id != gameObject.GetInstanceID())
 			return;
 		
-		if (button.interactable)
-		{
-			defaultColor = img.color;
-			img.color = status == AnswerStatus.None? colorNone : status == AnswerStatus.Good ? colorGood : colorBad;
-		}
+		img.color = status == AnswerStatus.None? colorNone : status == AnswerStatus.Good ? colorGood : colorBad;
+		
 	}
 
-	private void ClearSelect(int id)
+	public void ClearSelect(bool value)
 	{
-		if(id != gameObject.GetInstanceID())
-			return;
+		button.interactable = value;
 		
-		if (button.interactable)
-		{
-			img.color = defaultColor;
-		}
-		
+		img.color = defaultColor;
 	}
 }

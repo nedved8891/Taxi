@@ -30,6 +30,8 @@ public class SliderController : MonoBehaviour
         DialogueManager.OnVisibleDialog += Activate;
         
         UIGameOverController.OnGoNext += Restart;
+        
+        GameController.OnGameOver += Hide;
     }
 
     private void OnDisable()
@@ -39,6 +41,8 @@ public class SliderController : MonoBehaviour
         DialogueManager.OnVisibleDialog -= Activate;
         
         UIGameOverController.OnGoNext += Restart;
+        
+        GameController.OnGameOver -= Hide;
     }
     
     private void Restart()
@@ -53,6 +57,14 @@ public class SliderController : MonoBehaviour
     private void Awake()
     {
         CheckHandle();
+    }
+
+    private void Hide(float delay)
+    {
+        DOVirtual.DelayedCall(delay, () =>
+        {
+            _slider.gameObject.SetActive(false);
+        });
     }
 
     private void Activate(bool value)
@@ -91,23 +103,21 @@ public class SliderController : MonoBehaviour
         {
             case 0.25f:
                 indx = 1;
-                currentResult = TResults.Good;
                 break;
             case 0.5f:
                 indx = 2;
-                currentResult = TResults.Normal;
                 break;
             case 0.75f:
                 indx = 3;
-                currentResult = TResults.Bad;
                 break;
             case 1f:
                 indx = 4;
-                currentResult = TResults.Poor;
                 break;
         }
         
         handle.sprite = icons[indx];
+
+        currentResult = (TResults)indx;
 
         return indx;
     }
@@ -116,9 +126,9 @@ public class SliderController : MonoBehaviour
 [System.Serializable]
 public enum TResults
 {
-    Perfect = 2,
+    Perfect = 0,
     Good = 1,
-    Normal = 0,
-    Bad = -1,
-    Poor = -2,
+    Normal = 2,
+    Bad = 3,
+    Poor = 4,
 }

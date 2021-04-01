@@ -10,6 +10,8 @@ public class UIGameOverController : MonoBehaviour
     
     public static event Action<bool> OnStopCar;
     
+    public static event Action OnChangeScore;
+    
     public GameObject complete;
 
     public GameObject faile;
@@ -36,6 +38,7 @@ public class UIGameOverController : MonoBehaviour
             complete.SetActive(result >= 0);
             faile.SetActive(result < 0);
             
+            OnChangeScore?.Invoke();
             OnStopCar?.Invoke(false);
         });
     }
@@ -49,8 +52,6 @@ public class UIGameOverController : MonoBehaviour
 
     public void GoNext()
     {
-        PlayerPrefs.SetInt("Dollars", 300);
-        
         Hide();
         
         OnGoNext?.Invoke();

@@ -5,11 +5,11 @@
   </node>
   <node id="1" result="None" npcText="Very funny, this red car, man.">
     <answer text="The red Ferrari??" toNode="2" status="Good" />
-    <answer text="I am not a private detective to participate in surveillance" toNode="3" status="None" />
+    <answer text="I am not a private detective to participate in surveillance" toNode="3" status="Bad" />
   </node>
   <node id="2" result="None" npcText="Yes, where did you learn to drive?">
-    <answer text="In GTA" exit="True" status="Good" />
-    <answer text="In India" exit="True" status="Good" />
+    <answer text="In GTA. &lt;sprite=6&gt;" exit="True" status="Good" />
+    <answer text="In India." exit="True" status="Good" />
   </node>
   <node id="3" result="Fail" npcText="You're boring, man." />
 </dialogue>
