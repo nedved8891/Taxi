@@ -38,6 +38,17 @@ public class BttnFreeController : MonoBehaviour
 
     public void DialogStart()
     {
+        if (PlayerPrefs.HasKey("DialogID"))
+        {
+            PlayerPrefs.SetInt("DialogID", PlayerPrefs.GetInt("DialogID") == 3? 0 : PlayerPrefs.GetInt("DialogID") + 1);
+            PlayerPrefs.Save();
+        }
+        else
+        {
+            PlayerPrefs.SetInt("DialogID", 0);
+            PlayerPrefs.Save();   
+        }
+        
         OnStopCar?.Invoke(1);
 
         Activate(true);

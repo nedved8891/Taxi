@@ -27,7 +27,6 @@ public class UICompleteController : MonoBehaviour
 
     private void Change()
     {
-        Debug.Log("SliderController.currentResult: " + SliderController.currentResult);
         panel.sprite = sprites[(int) SliderController.currentResult];
     }
 }
