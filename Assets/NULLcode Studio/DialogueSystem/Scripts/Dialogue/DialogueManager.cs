@@ -369,17 +369,7 @@ public class DialogueManager : MonoBehaviour
 
 	private NDialogs GetDialogName()
 	{
-		int indx = (int)NDialogs.Dialog_1;
-		
-		if (PlayerPrefs.HasKey("DialogID"))
-		{
-			indx = PlayerPrefs.GetInt("DialogID") == 3 ? 0 : PlayerPrefs.GetInt("DialogID") + 1;
-		}
-		
-		PlayerPrefs.SetInt("DialogID", indx);
-		PlayerPrefs.Save();
-		
-		return (NDialogs)indx;
+		return (NDialogs)PlayerPrefs.GetInt("DialogID");
 	}
 
 	private int GetINT(string text)

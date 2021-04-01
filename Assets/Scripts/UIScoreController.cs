@@ -40,7 +40,7 @@ public class UIScoreController : MonoBehaviour
     {
         var value = SliderController.currentResult == TResults.Perfect ? 100 :
             SliderController.currentResult == TResults.Good ? 50 :
-            SliderController.currentResult == TResults.Good ? 10 : 0;
+            SliderController.currentResult == TResults.Normal ? 10 : 0;
         
         PlayerPrefs.SetInt("Dollars", PlayerPrefs.GetInt("Dollars", 0) + value);
         PlayerPrefs.Save();
