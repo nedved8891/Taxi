@@ -12,12 +12,16 @@ public class GameController : MonoBehaviour
     
     public static event Action<float> OnCloseDialog;
     
+    [Header("Автомобіль")]
     public GameObject car;
 
+    [Header("Точки з яких буде складений шлях")]
     public List<Transform> points;
     
+    [Header("Точки шляху")]
     public List<Vector3> path;
 
+    [Header("Швидксть авто")]
     public float speed;
 
     private Tween twn;
@@ -38,7 +42,9 @@ public class GameController : MonoBehaviour
         
         CameraController.OnResumeMoveCar += Resume;
         
-        CameraController.OnBoardingPassengerOutCar += GameOver;
+        //CameraController.OnBoardingPassengerOutCar += GameOver;
+
+        PassengerController.OnOutCar += GameOver;
         
         BttnFreeController.OnStopCar += Stop;
     }
@@ -59,7 +65,9 @@ public class GameController : MonoBehaviour
         
         CameraController.OnResumeMoveCar -= Resume;
         
-        CameraController.OnBoardingPassengerOutCar -= GameOver;
+        //CameraController.OnBoardingPassengerOutCar -= GameOver;
+        
+        PassengerController.OnOutCar -= GameOver;
         
         BttnFreeController.OnStopCar -= Stop;
     }
@@ -99,8 +107,6 @@ public class GameController : MonoBehaviour
     {
         OnGameOver?.Invoke(delay);
     }
-    
-    
 
     private void Next()
     {

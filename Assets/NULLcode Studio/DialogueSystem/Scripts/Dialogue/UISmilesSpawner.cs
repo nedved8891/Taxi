@@ -17,14 +17,14 @@ public class UISmilesSpawner : MonoBehaviour
    {
         DialogueManager.OnReceivedAnswer += CheckAnswer;  
 
-        PersonagesAnimator.OnPassengerReaction += ReceivedAnswer;
+        DriverController.OnPassengerReaction += ReceivedAnswer;
    }
 
    private void OnDisable()
    {
        DialogueManager.OnReceivedAnswer -= CheckAnswer; 
        
-       PersonagesAnimator.OnPassengerReaction -= ReceivedAnswer;
+       DriverController.OnPassengerReaction -= ReceivedAnswer;
    }
 
    private void CheckAnswer(AnswerStatus value)

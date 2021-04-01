@@ -18,9 +18,12 @@ public class ParticlesController : MonoBehaviour
 
     private void Play()
     {
-        foreach (var particle in particles)
+        if (SliderController.currentResult != TResults.Bad && SliderController.currentResult != TResults.Poor)
         {
-            particle.Play();
+            foreach (var particle in particles)
+            {
+                particle.Play();
+            }
         }
     }
 }

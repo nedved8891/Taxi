@@ -20,6 +20,10 @@ public class CameraController : MonoBehaviour
    
    public static event Action OnResumeMoveCar;
    
+   public static event Action OnPassengerSpawn;
+   
+   public static event Action OnPassengerGoInCar;
+   
    public static event Action<float> OnBoardingPassengerOutCar;
 
    public float speed = 0.5f;
@@ -41,6 +45,8 @@ public class CameraController : MonoBehaviour
       GameController.OnCloseDialog += CloseDialog;
 
       UIGameOverController.OnGoNext += Restart;
+
+      PassengerController.OnMoveCar += BoardingPassengerInCar;
    }
 
    private void OnDisable()
@@ -50,6 +56,8 @@ public class CameraController : MonoBehaviour
       GameController.OnCloseDialog -= CloseDialog;
       
       UIGameOverController.OnGoNext -= Restart;
+
+      PassengerController.OnMoveCar -= BoardingPassengerInCar;
    }
 
    private void Awake()
@@ -57,6 +65,11 @@ public class CameraController : MonoBehaviour
       _camera = GetComponent<Camera>();
 
       _transform = _camera.gameObject.transform;
+   }
+
+   private void BoardingPassengerInCar()
+   {
+      Change(TPoints.Dialog);
    }
 
    private void Restart()
@@ -105,10 +118,14 @@ public class CameraController : MonoBehaviour
          case TPoints.BoardingPassengerInCar:
             _transform.DOMove(endPoint.position, speed).OnStart(() =>
             {
+               OnPassengerSpawn?.Invoke();
+               
                _transform.DORotate(endPoint.eulerAngles, speed);
             }).OnComplete(() =>
             {
-               Change(TPoints.Dialog); // поки тут
+               //Change(TPoints.Dialog); // поки тут
+               
+               OnPassengerGoInCar?.Invoke();
             });
             break;
          case TPoints.BoardingPassengerOutCar:
