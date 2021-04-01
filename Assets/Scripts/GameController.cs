@@ -8,6 +8,8 @@ public class GameController : MonoBehaviour
 {
     public static event Action<float> OnCarStoped;
     
+    public static event Action<float> OnCarResumed;
+    
     public static event Action<float> OnGameOver;
     
     public static event Action<float> OnCloseDialog;
@@ -32,18 +34,14 @@ public class GameController : MonoBehaviour
         
         DialogueManager.OnResumeMoveCar += Resume;
         
-        DialogueManager.OnPauseCar += Pause;
+        DialogueManager.OnPauseCar += Stop;
         
         DialogueManager.OnCompleteDialog += CompleteDialog;
         
-        //UIGameOverController.OnGoNext += Next;
-        
-        UIGameOverController.OnStopCar += Pause;
+        UIGameOverController.OnStopCar += Stop;
         
         CameraController.OnResumeMoveCar += Resume;
         
-        //CameraController.OnBoardingPassengerOutCar += GameOver;
-
         PassengerController.OnOutCar += GameOver;
         
         BttnFreeController.OnStopCar += Stop;
@@ -55,17 +53,13 @@ public class GameController : MonoBehaviour
         
         DialogueManager.OnResumeMoveCar -= Resume;
         
-        DialogueManager.OnPauseCar -= Pause;
+        DialogueManager.OnPauseCar -= Stop;
         
         DialogueManager.OnCompleteDialog -= CompleteDialog;
         
-        //UIGameOverController.OnGoNext -= Next;
-        
-        UIGameOverController.OnStopCar -= Pause;
+        UIGameOverController.OnStopCar -= Stop;
         
         CameraController.OnResumeMoveCar -= Resume;
-        
-        //CameraController.OnBoardingPassengerOutCar -= GameOver;
         
         PassengerController.OnOutCar -= GameOver;
         
@@ -143,23 +137,22 @@ public class GameController : MonoBehaviour
         if (!twn.IsPlaying())
         {
             twn.Play();
+            
+            OnCarResumed?.Invoke(0.5f);
         }
     }
     
-    private void Pause(float delay)
-    {
-        Stop(1);
-        
-        //DOVirtual.DelayedCall(1 + delay, Resume);
-    }
-
     private void Pause(bool value)
     {
         DOVirtual.DelayedCall(0, () =>
         {
             if(!value)
                 if (twn.IsPlaying())
+                {
                     twn.Pause();
+                    
+                    OnCarStoped?.Invoke(0.5f);
+                }
         });
     }
 }

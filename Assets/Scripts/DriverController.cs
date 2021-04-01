@@ -17,6 +17,12 @@ public class DriverController : MonoBehaviour
         DialogueManager.OnSelectAnswer += SetAnimation;
       
         DialogueManager.OnReceivedAnswer += Change;
+
+        GameController.OnCarStoped += Stop;
+        
+        GameController.OnCarResumed += Drive;
+
+        DialogueManager.OnSelectAnswer += Talking;
     }
 
     private void OnDisable()
@@ -24,6 +30,12 @@ public class DriverController : MonoBehaviour
         DialogueManager.OnSelectAnswer -= SetAnimation;
       
         DialogueManager.OnReceivedAnswer += Change;
+        
+        GameController.OnCarStoped -= Stop;
+        
+        GameController.OnCarResumed -= Drive;
+        
+        DialogueManager.OnSelectAnswer += Talking;
     }
 
     private void Awake()
@@ -38,6 +50,27 @@ public class DriverController : MonoBehaviour
         DOVirtual.DelayedCall(1.5f, () =>
         {
             OnPassengerReaction?.Invoke(reaction);
+        });
+    }
+
+    private void Stop(float delay)
+    {
+        DOVirtual.DelayedCall(delay, () =>
+        {
+            _animator.Play("Stoping");
+        });
+    }
+
+    private void Talking(int value)
+    {
+        _animator.Play("Talking");
+    }
+    
+    private void Drive(float delay)
+    {
+        DOVirtual.DelayedCall(delay, () =>
+        {
+            _animator.Play("Driving");
         });
     }
 
