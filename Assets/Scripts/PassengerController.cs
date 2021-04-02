@@ -27,11 +27,15 @@ public class PassengerController : MonoBehaviour
     private void OnEnable()
     {
         CameraController.OnBoardingPassengerOutCar += OutCar;
+
+        DialogueManager.OnTalkingPassangers += Talking;
     }
 
     private void OnDisable()
     {
         CameraController.OnBoardingPassengerOutCar -= OutCar;
+        
+        DialogueManager.OnTalkingPassangers -= Talking;
     }
     
     private void Awake()
@@ -56,6 +60,12 @@ public class PassengerController : MonoBehaviour
     {
         _animator.Play(animation.ToString());
     }
+    
+    private void Talking(float delay)
+    {
+        DOVirtual.DelayedCall(delay, () => { _animator.Play("TalkingPassengers"); });
+    }
+
 
     public void EventOpenDoor()
     {

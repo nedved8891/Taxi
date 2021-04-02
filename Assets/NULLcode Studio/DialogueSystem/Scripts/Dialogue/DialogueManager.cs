@@ -28,7 +28,7 @@ public class DialogueManager : MonoBehaviour
 	
 	public static event Action<int> OnSelectAnswer;
 	
-	public static event Action<int> OnClearSelectAnswer;//Повертаєм колір після показу правильності відповіді
+	public static event Action<float> OnTalkingPassangers;
 	
 	public static event Action OnResumeMoveCar;
 	
@@ -286,8 +286,6 @@ public class DialogueManager : MonoBehaviour
 		
 		DOVirtual.DelayedCall(4f, () =>
 		{
-			//OnClearSelectAnswer?.Invoke(id);
-			
 			scrollRect.gameObject.SetActive(false);
 			
 			OnCompleteDialog?.Invoke();
@@ -319,8 +317,6 @@ public class DialogueManager : MonoBehaviour
 			DOVirtual.DelayedCall(1.5f, () =>
 			{
 				BuildDialogue(current);
-
-				//OnClearSelectAnswer?.Invoke(id);
 			});
 		}).OnStart(() =>
 		{
@@ -339,6 +335,8 @@ public class DialogueManager : MonoBehaviour
 			Debug.LogError(this + " в диалоге [" + fileName + ".xml] отсутствует или указан неверно идентификатор узла.");
 			return;
 		}
+		
+		OnTalkingPassangers?.Invoke(0.5f);
 
 		AddToList(false, 0, node[j].npcText, 0, string.Empty, false, global::AnswerStatus.None); // добавление текста NPC
 
