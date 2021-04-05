@@ -37,7 +37,9 @@ public class CameraController : MonoBehaviour
    private Camera _camera;
 
    private Transform _transform;
-   
+
+   private Animator _animator;
+
    private void OnEnable()
    {
       GameController.OnCarStoped += StopCar;
@@ -63,6 +65,8 @@ public class CameraController : MonoBehaviour
    private void Awake()
    {
       _camera = GetComponent<Camera>();
+      
+      _animator = GetComponent<Animator>();
 
       _transform = _camera.gameObject.transform;
    }
@@ -95,49 +99,78 @@ public class CameraController : MonoBehaviour
 
    private void Change(TPoints tpoint)
    {
+      Debug.Log(tpoint);
       switch (tpoint)
       {
          case TPoints.Movement:
-            _transform.DOMove(startPoint.position, speed).OnStart(() =>
-            {
-               _transform.DORotate(startPoint.eulerAngles, speed);
-            }).OnComplete(() =>
-            {
-               OnResumeMoveCar?.Invoke();
-            });
+            _animator.SetTrigger("Move");
+            //_transform.DOMove(startPoint.position, speed).OnStart(() =>
+            //{
+            //   _transform.DORotate(startPoint.eulerAngles, speed);
+            //}).OnComplete(() =>
+            //{
+            //   OnResumeMoveCar?.Invoke();
+            //});
             break;
          case TPoints.Dialog:
-            _transform.DOMove(dialogPoint.position, speed).OnStart(() =>
-            {
-               _transform.DORotate(dialogPoint.eulerAngles, speed);
-            }).OnComplete(() =>
-            {
-               OnStartDialog?.Invoke(0);
-            });
+            _animator.SetTrigger("Dialog");
+            //_transform.DOMove(dialogPoint.position, speed).OnStart(() =>
+            //{
+            //   _transform.DORotate(dialogPoint.eulerAngles, speed);
+            //}).OnComplete(() =>
+            //{
+            //   OnStartDialog?.Invoke(0);
+            //});
             break;
          case TPoints.BoardingPassengerInCar:
-            _transform.DOMove(endPoint.position, speed).OnStart(() =>
-            {
-               OnPassengerSpawn?.Invoke();
-               
-               _transform.DORotate(endPoint.eulerAngles, speed);
-            }).OnComplete(() =>
-            {
-               //Change(TPoints.Dialog); // поки тут
-               
-               OnPassengerGoInCar?.Invoke();
-            });
+            Debug.Log("Passenger");
+            _animator.SetTrigger("Passenger");
+            //_transform.DOMove(endPoint.position, speed)
+             //  .OnStart(() =>
+            //   {
+                  OnPassengerSpawn?.Invoke();
+                  
+             //     _transform.DORotate(endPoint.eulerAngles, speed);
+              // }).OnComplete(() =>
+             //  {
+              //    OnPassengerGoInCar?.Invoke();
+              // });
             break;
          case TPoints.BoardingPassengerOutCar:
-            _transform.DOMove(endPoint.position, speed).OnStart(() =>
-            {
-               _transform.DORotate(endPoint.eulerAngles, speed);
-            }).OnComplete(() =>
-            {
-               OnBoardingPassengerOutCar?.Invoke(1);
-            });
+            _animator.SetTrigger("Out");
+            //_transform.DOMove(endPoint.position, speed).OnStart(() =>
+            //{
+            //   _transform.DORotate(endPoint.eulerAngles, speed);
+            //}).OnComplete(() =>
+            //{
+            //   OnBoardingPassengerOutCar?.Invoke(1);
+            //});
             break;
       }
+   }
+   
+   public void EventMovement()
+   {
+      Debug.Log("EventMovement");
+      OnResumeMoveCar?.Invoke();
+   }
+   
+   public void EventDialog()
+   {
+      Debug.Log("EventDialog");
+      OnStartDialog?.Invoke(0);
+   }
+
+   public void EventBoardingPassengerInCar()
+   {
+      Debug.Log("EventBoardingPassengerInCar");
+      OnPassengerGoInCar?.Invoke();
+   }
+   
+   public void EventBoardingPassengerOutCar()
+   {
+      Debug.Log("EventBoardingPassengerOutCar");
+      OnBoardingPassengerOutCar?.Invoke(1);
    }
 
    private void Update()
