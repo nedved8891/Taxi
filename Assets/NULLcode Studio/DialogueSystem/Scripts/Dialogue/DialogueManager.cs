@@ -20,19 +20,15 @@ public enum NDialogs
 
 public class DialogueManager : MonoBehaviour
 {
-	public static event Action<AnswerStatus> OnReceivedAnswer;
+	public static event Action<int> OnSelectAnswer; //Вибрана відповідь і потрібно показати правильна чи ні
 	
-	public static event Action<bool> OnVisibleDialog;
+	public static event Action<float> OnTalkingPassangers; //Включити, щоб пасажир озвучив репліку
 	
-	public static event Action OnCompleteDialog;
+	public static event Action<List<Actions>> OnShowCooseActionPanel; //Показати панель дій
 	
-	public static event Action<int> OnSelectAnswer;
-	
-	public static event Action<float> OnTalkingPassangers;
-	
-	public static event Action OnResumeMoveCar;
-	
-	public static event Action<float> OnPauseCar;
+	public static event Action<Actions, bool> OnCompleteDialogue; //Завершення діалогу
+
+	public static event Action OnDialogStarted; //Діалог стартував, потрібно налаштувати іконку для персонажа
 	
 	[Header("Діалог")]
 	public NDialogs dialogName;
@@ -41,19 +37,23 @@ public class DialogueManager : MonoBehaviour
 	public ScrollRect scrollRect;
 	
 	[Header("Кнопки")]
-	public ButtonComponent[] buttonText; // первый элемент списка, всегда будет использоваться для вывода текста NPC, остальные элементы для ответов, соответственно, общее их количество должно быть достаточным
+	public ButtonComponent[] buttonText;
 	
 	[Header("Папка з діалогами")]
-	public string folder = "Taxi"; // подпапка в Resources, для чтения
+	public string folder = "Taxi";
 	
 	[Header("Зміщення")]
 	public int offset = 20;
 
 	public static DialogueManager _internal;
+
+	[Header("Затримка показа відповідей після тексту пажажира")] [SerializeField]
+	private float _delayShowAnswers = 1f;
 	
 	private string fileName, lastName;
 	private List<Dialogue> node;
 	private Dialogue dialogue;
+	private Dialogue _currentDialogue;
 	private Answer answer;
 	private float curY, height;
 	private int id;
@@ -62,18 +62,32 @@ public class DialogueManager : MonoBehaviour
 	private void OnEnable()
 	{
 		CameraController.OnStartDialog += DialogueStart;
+		
+		ChooseActionPanelController.OnChooseAction += OnChooseActionHandle;
 	}
 
 	private void OnDisable()
 	{
 		CameraController.OnStartDialog -= DialogueStart;
+		
+		ChooseActionPanelController.OnChooseAction -= OnChooseActionHandle;
+	}
+	
+	private void OnChooseActionHandle (Actions action)
+	{
+		var isRightAction = _currentDialogue.completeActions.Contains (action);
+
+		PlayerPrefs.SetInt("DialogWin", isRightAction? 1 : 0);
+		PlayerPrefs.Save();
+		
+		OnCompleteDialogue?.Invoke (action, isRightAction);
+		
+		Debug.Log("Завершений діалог: " + isRightAction);
 	}
 
 	private void DialogueStart(int delay = 0)
 	{
 		if(dialogName == NDialogs.None) return;
-		
-		OnVisibleDialog?.Invoke(true);
 		
 		DOVirtual.DelayedCall(delay, () =>
 		{
@@ -85,7 +99,7 @@ public class DialogueManager : MonoBehaviour
 		
 			Load();
 			
-			OnResumeMoveCar?.Invoke();
+			OnDialogStarted?.Invoke();
 		});
 	}
 
@@ -102,6 +116,14 @@ public class DialogueManager : MonoBehaviour
 	private void Awake()
 	{
 		_internal = this;
+	}
+
+	private void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			DialogueStart();
+		}
 	}
 
 	private void Load()
@@ -128,9 +150,43 @@ public class DialogueManager : MonoBehaviour
 					dialogue.answer = new List<Answer>();
 					dialogue.npcText = reader.GetAttribute("npcText");
 					dialogue.id = GetINT(reader.GetAttribute("id"));
+					
+					dialogue.isFinalyPhrase = GetBOOL ( reader.GetAttribute ( "isFinalyPhrase" ) );
+					
+					XmlReader inner = reader.ReadSubtree ( );
+					
+					if ( dialogue.isFinalyPhrase )
+					{
+						int actionsCount = 0;
+						if ( inner.ReadToFollowing ( "completeActions" ) )
+						{
+							actionsCount = GetINT ( reader.GetAttribute ( "length" ) );
+							dialogue.completeActions = new List<Actions> ( );
+
+							for ( var i = 0; i < actionsCount; i++ )
+							{
+								dialogue.completeActions.Add ( ( Actions )
+									Enum.Parse ( typeof ( Actions ), reader.GetAttribute ( "completeAction_" + i ), true ) );
+							}
+						}
+
+						if ( inner.ReadToFollowing ( "looseActions" ) )
+						{
+							actionsCount = GetINT ( reader.GetAttribute ( "length" ) );
+							dialogue.looseActions = new List<Actions> ( );
+
+							for ( var i = 0; i < actionsCount; i++ )
+							{
+								dialogue.looseActions.Add ( ( Actions )
+									Enum.Parse ( typeof ( Actions ), reader.GetAttribute ( "looseAction_" + i ), true ) );
+							}
+						}
+					}
+					
 					node.Add(dialogue);
 
-					XmlReader inner = reader.ReadSubtree();
+					//XmlReader inner = reader.ReadSubtree();
+					
 					while(inner.ReadToFollowing("answer"))
 					{
 						answer = new Answer();
@@ -163,7 +219,7 @@ public class DialogueManager : MonoBehaviour
 		BuildDialogue(0);
 	}
 
-	private void AddToList(bool exit, int toNode, string text, int questStatus, string questName, bool isActive, AnswerStatus answerStatus)
+	private void AddToList(int toNode, string text, bool isActive, AnswerStatus answerStatus)
 	{
 		buttonText[id].gameObject.SetActive(true);
 		buttonText[id].ClearSelect(isActive);
@@ -174,16 +230,7 @@ public class DialogueManager : MonoBehaviour
 		height = buttonText[id].rect.sizeDelta.y;
 		buttonText[id].rect.anchoredPosition = new Vector2(0, -height/2 - curY);
 
-		if(exit)
-		{
-			SetExitDialogue(buttonText[id].button);
-			if(questStatus != 0) SetQuestStatus(buttonText[id].button, questStatus, questName);
-		}
-		else
-		{
-			SetNextNode(buttonText[id].button, toNode);
-			if(questStatus != 0) SetQuestStatus(buttonText[id].button, questStatus, questName);
-		}
+		SetNextNode(buttonText[id].button, toNode);
 
 		if (isActive)
 			SetAnswerStatus(buttonText[id].button, answerStatus);
@@ -194,19 +241,26 @@ public class DialogueManager : MonoBehaviour
 		RectContent();
 	}
 
-	private void SetEndedDialog(float delay)
+	private void SetEndedDialog(float delay, int dialogueID )
 	{
 		DOVirtual.DelayedCall(delay, () =>
 		{
 			_active = false;
+			
+			var actionsList = new List<Actions> ( );
+
+			_currentDialogue = node [ dialogueID ];
+
+			if ( node [ dialogueID ].completeActions != null && node [ dialogueID ].completeActions.Count > 0 )
+				actionsList.AddRange ( node [ dialogueID ].completeActions );
+
+			if ( node [ dialogueID ].looseActions != null && node [ dialogueID ].looseActions.Count > 0 )
+				actionsList.AddRange ( node [ dialogueID ].looseActions );
+			
+			//_chooseActionPanel.Show ( actionsList );
+			OnShowCooseActionPanel?.Invoke(actionsList);
 		
-			//OnClearSelectAnswer?.Invoke(id);
-			
 			scrollRect.gameObject.SetActive(false);
-			
-			OnPauseCar?.Invoke(1.0f);
-			
-			OnCompleteDialog?.Invoke();
 		});
 	}
 
@@ -231,50 +285,14 @@ public class DialogueManager : MonoBehaviour
 		RectContent();
 	}
 
-	private void SetQuestStatus(Button button, int i, string name) // событие, для управлением статуса, текущего квеста
-	{
-		string t = name + "|" + i; // склейка имени квеста и значения, которое ему назначено
-		button.onClick.AddListener(() => QuestStatus(t));
-	}
-
 	private void SetNextNode(Button button, int i) // событие, для перенаправления на другой узел диалога
 	{
 		button.onClick.AddListener(() => NextBuildDialogue(i, button.gameObject.GetInstanceID()));
 	}
 
-	private void SetExitDialogue(Button button) // событие, для выхода из диалога
-	{
-		button.onClick.AddListener(() => CloseWindow(button.gameObject.GetInstanceID()));
-	}
-
 	private void SetAnswerStatus(Button button, AnswerStatus value) // событие, для управлением статуса, текущего квеста
 	{
-		button.onClick.AddListener(() => AnswerStatus(value));
-
 		button.gameObject.GetComponent<ButtonComponent>().status = value;
-	}
-
-	private void AnswerStatus(AnswerStatus value)
-	{
-		OnReceivedAnswer?.Invoke(value);
-	}
-
-	private void QuestStatus(string s) // меняем статус квеста
-	{
-		string[] t = s.Split(new char[]{'|'});
-
-		if(t[1] == "1")
-		{
-			QuestManager.SetQuestStatus(t[0], QuestManager.Status.Active);
-		}
-		else if(t[1] == "2")
-		{
-			QuestManager.SetQuestStatus(t[0], QuestManager.Status.Disable);
-		}
-		else if(t[1] == "3")
-		{
-			QuestManager.SetQuestStatus(t[0], QuestManager.Status.Complete);
-		}
 	}
 
 	private void CloseWindow(int id = -1) // закрываем окно диалога
@@ -287,8 +305,6 @@ public class DialogueManager : MonoBehaviour
 		DOVirtual.DelayedCall(4f, () =>
 		{
 			scrollRect.gameObject.SetActive(false);
-			
-			OnCompleteDialog?.Invoke();
 		});
 	}
 
@@ -312,15 +328,11 @@ public class DialogueManager : MonoBehaviour
 
 	private void NextBuildDialogue(int current, int id)
 	{
-		DOVirtual.DelayedCall(3.5f, () =>
+		OnSelectAnswer?.Invoke(id);
+		
+		DOVirtual.DelayedCall(1f, () =>
 		{
-			DOVirtual.DelayedCall(1.5f, () =>
-			{
-				BuildDialogue(current);
-			});
-		}).OnStart(() =>
-		{
-			OnSelectAnswer?.Invoke(id);
+			BuildDialogue(current);
 		});
 	}
 
@@ -338,27 +350,22 @@ public class DialogueManager : MonoBehaviour
 		
 		OnTalkingPassangers?.Invoke(0.5f);
 
-		AddToList(false, 0, node[j].npcText, 0, string.Empty, false, global::AnswerStatus.None); // добавление текста NPC
+		AddToList ( current, node [ j ].npcText, false, global::AnswerStatus.None ); // добавление текста NPC
 
-		if (node[j].answer.Count > 0)
+		if ( !node [ j ].isFinalyPhrase )
 		{
-			for (var i = 0; i < node[j].answer.Count; i++)
+			DOVirtual.DelayedCall ( _delayShowAnswers, ( ) =>
 			{
-				var value = QuestManager.GetCurrentValue(node[j].answer[i].questName);
-				// фильтр ответов, относительно текущего статуса квеста
-				if (value >= node[j].answer[i].questValueGreater && node[j].answer[i].questValueGreater != 0 ||
-				    node[j].answer[i].questValue == value && node[j].answer[i].questValueGreater == 0 ||
-				    node[j].answer[i].questName == null)
+				for ( var i = 0; i < node [ j ].answer.Count; i++ )
 				{
-					AddToList(node[j].answer[i].exit, node[j].answer[i].toNode, node[j].answer[i].text,
-						node[j].answer[i].questStatus, node[j].answer[i].questName, true,
-						node[j].answer[i].status); // текст игрока
+					AddToList ( node [ j ].answer [ i ].toNode, node [ j ].answer [ i ].text,
+						true, node [ j ].answer [ i ].status ); // текст игрока
 				}
-			}
+			}, false );
 		}
 		else
 		{
-			SetEndedDialog(2);
+			SetEndedDialog (2, j );
 		}
 
 		EventSystem.current.SetSelectedGameObject(scrollRect.gameObject); // выбор окна диалога как активного, чтобы снять выделение с кнопок диалога
@@ -396,6 +403,8 @@ internal class Dialogue
 	public string npcText;
 	public ResultStatus result;
 	public List<Answer> answer;
+	public bool isFinalyPhrase = false;
+	public List<Actions> completeActions, looseActions;
 }
 
 internal class Answer

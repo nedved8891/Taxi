@@ -12,12 +12,10 @@ public class UIChangePersonage : MonoBehaviour
 
    private void OnEnable()
    {
-      UIGameOverController.OnGoNext += Change;
    }
 
    private void OnDisable()
    {
-      UIGameOverController.OnGoNext -= Change;
    }
 
    private void Change()

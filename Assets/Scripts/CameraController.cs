@@ -46,7 +46,7 @@ public class CameraController : MonoBehaviour
 
       GameController.OnCloseDialog += CloseDialog;
 
-      UIGameOverController.OnGoNext += Restart;
+      GameController.OnRestart += Restart;
 
       PassengerController.OnMoveCar += BoardingPassengerInCar;
    }
@@ -57,7 +57,7 @@ public class CameraController : MonoBehaviour
 
       GameController.OnCloseDialog -= CloseDialog;
       
-      UIGameOverController.OnGoNext -= Restart;
+      GameController.OnRestart -= Restart;
 
       PassengerController.OnMoveCar -= BoardingPassengerInCar;
    }
@@ -104,72 +104,38 @@ public class CameraController : MonoBehaviour
       {
          case TPoints.Movement:
             _animator.SetTrigger("Move");
-            //_transform.DOMove(startPoint.position, speed).OnStart(() =>
-            //{
-            //   _transform.DORotate(startPoint.eulerAngles, speed);
-            //}).OnComplete(() =>
-            //{
-            //   OnResumeMoveCar?.Invoke();
-            //});
             break;
          case TPoints.Dialog:
             _animator.SetTrigger("Dialog");
-            //_transform.DOMove(dialogPoint.position, speed).OnStart(() =>
-            //{
-            //   _transform.DORotate(dialogPoint.eulerAngles, speed);
-            //}).OnComplete(() =>
-            //{
-            //   OnStartDialog?.Invoke(0);
-            //});
             break;
          case TPoints.BoardingPassengerInCar:
-            Debug.Log("Passenger");
             _animator.SetTrigger("Passenger");
-            //_transform.DOMove(endPoint.position, speed)
-             //  .OnStart(() =>
-            //   {
-                  OnPassengerSpawn?.Invoke();
-                  
-             //     _transform.DORotate(endPoint.eulerAngles, speed);
-              // }).OnComplete(() =>
-             //  {
-              //    OnPassengerGoInCar?.Invoke();
-              // });
+
+            OnPassengerSpawn?.Invoke();
             break;
          case TPoints.BoardingPassengerOutCar:
             _animator.SetTrigger("Out");
-            //_transform.DOMove(endPoint.position, speed).OnStart(() =>
-            //{
-            //   _transform.DORotate(endPoint.eulerAngles, speed);
-            //}).OnComplete(() =>
-            //{
-            //   OnBoardingPassengerOutCar?.Invoke(1);
-            //});
             break;
       }
    }
    
    public void EventMovement()
    {
-      Debug.Log("EventMovement");
       OnResumeMoveCar?.Invoke();
    }
    
    public void EventDialog()
    {
-      Debug.Log("EventDialog");
       OnStartDialog?.Invoke(0);
    }
 
    public void EventBoardingPassengerInCar()
    {
-      Debug.Log("EventBoardingPassengerInCar");
       OnPassengerGoInCar?.Invoke();
    }
    
    public void EventBoardingPassengerOutCar()
    {
-      Debug.Log("EventBoardingPassengerOutCar");
       OnBoardingPassengerOutCar?.Invoke(1);
    }
 

@@ -1,16 +1,22 @@
 <dialogue name="Dialog_3">
-  <node id="0" result="None" npcText="I'm being tailed! Let's go faster!">
+  <node id="0" result="None" npcText="I'm being tailed! Let's go faster!" isFinalyPhrase="False">
     <answer text="Did you smoke something?" toNode="1" status="Bad" />
     <answer text="Yes, Sir!" toNode="2" status="Good" />
   </node>
-  <node id="1" result="None" npcText="I'm serious. Her husband is following me.">
+  <node id="1" result="None" npcText="I'm serious. Her husband is following me." isFinalyPhrase="False">
     <answer text="Ha-ha. And where is your clothing?" toNode="3" status="Bad" />
     <answer text="Wow, family drama. Will do my best!" toNode="4" status="Good" />
   </node>
   <node id="2" result="None" npcText="We loose him?">
-    <answer text="Hey man, we still stand on the same place. &lt;sprite=6&gt;" toNode="1" status="Bad" />
+    <answer text="Hey man, we still stand on the same place. &lt;sprite=6&gt;" toNode="1" status="Bad" isFinalyPhrase="False"/>
     <answer text="I guess so." toNode="1" status="Bad" />
   </node>
-  <node id="3" result="Fail" npcText="Too much questions, he will kill me!" />
-  <node id="4" result="Complete" npcText="Thanks Bro! You will save my balls!" />
+  <node id="3" result="Fail" npcText="Too much questions, he will kill me!" isFinalyPhrase="True">
+    <completeActions length="1" completeAction_0="Accelerate" />
+    <looseActions length="2" looseAction_0="Expel" looseAction_1="CallThePolice" />
+  </node>
+  <node id="4" result="Complete" npcText="Thanks Bro! You will save my balls!" isFinalyPhrase="True">
+    <completeActions length="1" completeAction_0="Accelerate" />
+    <looseActions length="2" looseAction_0="Expel" looseAction_1="CallThePolice" />
+  </node>
 </dialogue>

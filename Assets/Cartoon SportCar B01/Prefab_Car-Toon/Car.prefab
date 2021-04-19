@@ -73,7 +73,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f989b8005a3dc743aa8b855e649c4b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  regina: {fileID: 2275744124283708537, guid: 974fe295cf0c47048a0776bfa58a64f9, type: 3}
+  passengers: []
   spawnPoint: {fileID: 535012153674596159}
 --- !u!114 &4201550217586079269
 MonoBehaviour:
@@ -117,7 +117,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2388167600252083513
 Transform:
   m_ObjectHideFlags: 0

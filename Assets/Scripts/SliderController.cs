@@ -27,9 +27,7 @@ public class SliderController : MonoBehaviour
     {
         UISmilesController.OnChangeSlider += Change;
 
-        DialogueManager.OnVisibleDialog += Activate;
-        
-        UIGameOverController.OnGoNext += Restart;
+        GameController.OnRestart += Restart;
         
         GameController.OnGameOver += Hide;
     }
@@ -38,9 +36,7 @@ public class SliderController : MonoBehaviour
     {
         UISmilesController.OnChangeSlider -= Change;
         
-        DialogueManager.OnVisibleDialog -= Activate;
-        
-        UIGameOverController.OnGoNext += Restart;
+        GameController.OnRestart += Restart;
         
         GameController.OnGameOver -= Hide;
     }

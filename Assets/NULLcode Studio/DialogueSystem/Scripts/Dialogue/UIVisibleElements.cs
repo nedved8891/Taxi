@@ -10,15 +10,11 @@ public class UIVisibleElements : MonoBehaviour
     private void OnEnable()
     {
         SliderController.OnGameOver += GameOver;
-        
-        UIGameOverController.OnGoNext += Next;
     }
 
     private void OnDisable()
     {
         SliderController.OnGameOver -= GameOver;
-        
-        UIGameOverController.OnGoNext -= Next;
     }
     
     private void Next()

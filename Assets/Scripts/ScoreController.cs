@@ -10,12 +10,12 @@ public class ScoreController : MonoBehaviour
     
     private void OnEnable()
     {
-        UIGameOverController.OnGoNext += Change;
+        GameController.OnRestart += Change;
     }
 
     private void OnDisable()
     {
-        UIGameOverController.OnGoNext -= Change;
+        GameController.OnRestart -= Change;
     }
 
     private void Awake()

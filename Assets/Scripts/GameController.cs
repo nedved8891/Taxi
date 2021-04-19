@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Random = UnityEngine.Random;
 
 public class GameController : MonoBehaviour
 {
@@ -14,11 +15,16 @@ public class GameController : MonoBehaviour
     
     public static event Action<float> OnCloseDialog;
     
+    public static event Action OnRestart;
+    
     [Header("Автомобіль")]
     public GameObject car;
 
     [Header("Точки з яких буде складений шлях")]
     public List<Transform> points;
+
+    [Header("Точки спавна")]
+    public List<Transform> spawnPoints;
     
     [Header("Точки шляху")]
     public List<Vector3> path;
@@ -30,40 +36,20 @@ public class GameController : MonoBehaviour
 
     private void OnEnable()
     {
-        DialogueManager.OnVisibleDialog += Pause;
-        
-        DialogueManager.OnResumeMoveCar += Resume;
-        
-        DialogueManager.OnPauseCar += Stop;
-        
-        DialogueManager.OnCompleteDialog += CompleteDialog;
-        
-        UIGameOverController.OnStopCar += Stop;
-        
         CameraController.OnResumeMoveCar += Resume;
         
-        PassengerController.OnOutCar += GameOver;
-        
-        BttnFreeController.OnStopCar += Stop;
+        PassengerController.OnOutCar += OutCar;
+
+        UIGameOverController.OnRestart += Restart;
     }
 
     private void OnDisable()
     {
-        DialogueManager.OnVisibleDialog -= Pause;
-        
-        DialogueManager.OnResumeMoveCar -= Resume;
-        
-        DialogueManager.OnPauseCar -= Stop;
-        
-        DialogueManager.OnCompleteDialog -= CompleteDialog;
-        
-        UIGameOverController.OnStopCar -= Stop;
-        
         CameraController.OnResumeMoveCar -= Resume;
         
-        PassengerController.OnOutCar -= GameOver;
+        PassengerController.OnOutCar -= OutCar;
         
-        BttnFreeController.OnStopCar -= Stop;
+        UIGameOverController.OnRestart -= Restart;
     }
 
     private void Awake()
@@ -76,9 +62,9 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        Move();
+        Spawn();
     }
-
+    
     private void Callback(int waypointIndex)
     {
         car.transform.DOLocalRotate(points[waypointIndex].localRotation.eulerAngles, 0.7f)
@@ -97,23 +83,34 @@ public class GameController : MonoBehaviour
         }
     } 
     
-    private void GameOver(float delay)
+    private void OutCar(float delay)
     {
-        OnGameOver?.Invoke(delay);
+        //OnGameOver?.Invoke(delay);
+
+        Move(2);
     }
 
-    private void Next()
+    private void Restart()
     {
-        DOVirtual.DelayedCall(0, () =>
-        {
-            if (!twn.IsPlaying())
-                twn.Play();
-        });
+        OnRestart?.Invoke();
+
+        Spawn();
     }
 
-    private void Move()
+    private void Spawn()
+    {
+        Debug.Log("Spawn");
+        
+        car.transform.position = spawnPoints[Random.Range(0, spawnPoints.Count)].position;
+    }
+
+    private void Move(float duration)
     {
         twn = car.transform.DOPath(path.ToArray(), speed, PathType.Linear, PathMode.Full3D)
+            .OnStart(() =>
+            {
+                Stop(duration);
+            })
             .SetLoops(-1)
             .SetEase(Ease.Linear)
             .OnWaypointChange(Callback);

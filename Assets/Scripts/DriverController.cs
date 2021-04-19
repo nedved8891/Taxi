@@ -6,18 +6,12 @@ using UnityEngine;
 
 public class DriverController : MonoBehaviour
 {
-    public static event Action<AnswerStatus> OnPassengerReaction;
-   
     private Animator _animator;
 
-    private AnswerStatus reaction;
-   
     private void OnEnable()
     {
         DialogueManager.OnSelectAnswer += SetAnimation;
       
-        DialogueManager.OnReceivedAnswer += Change;
-
         GameController.OnCarStoped += Stop;
         
         GameController.OnCarResumed += Drive;
@@ -29,8 +23,6 @@ public class DriverController : MonoBehaviour
     {
         DialogueManager.OnSelectAnswer -= SetAnimation;
       
-        DialogueManager.OnReceivedAnswer += Change;
-        
         GameController.OnCarStoped -= Stop;
         
         GameController.OnCarResumed -= Drive;
@@ -46,11 +38,6 @@ public class DriverController : MonoBehaviour
     private void SetAnimation(int value)
     {
         _animator.SetTrigger("Rotate");
-
-        DOVirtual.DelayedCall(1.5f, () =>
-        {
-            OnPassengerReaction?.Invoke(reaction);
-        });
     }
 
     private void Stop(float delay)
@@ -72,10 +59,5 @@ public class DriverController : MonoBehaviour
         {
             _animator.Play("Driving");
         });
-    }
-
-    private void Change(AnswerStatus value)
-    {
-        reaction = value;
     }
 }

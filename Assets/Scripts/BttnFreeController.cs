@@ -1,41 +1,35 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
 public class BttnFreeController : MonoBehaviour
 {
-    public static event Action<float> OnStopCar;
-    
+    public static event Action OnPressBttnFree;
+
     public GameObject bttn;
     
     private Tween twn;
     
     private void OnEnable()
     {
-        DialogueManager.OnVisibleDialog += Activate;
-        
-        UIGameOverController.OnGoNext += Next;
+        GameController.OnRestart += Restart;
     }
 
     private void OnDisable()
     {
-        DialogueManager.OnVisibleDialog -= Activate;
-        
-        UIGameOverController.OnGoNext -= Next;
+        GameController.OnRestart -= Restart;
     }
 
     private void Start()
     {
-        Activate(false);
+        Visible(true);
     }
 
-    private void Next()
+    private void Restart()
     {
-        Activate(false);
+        Visible(true);
     }
-
+    
     public void DialogStart()
     {
         if (PlayerPrefs.HasKey("DialogID"))
@@ -49,16 +43,17 @@ public class BttnFreeController : MonoBehaviour
             PlayerPrefs.Save();   
         }
         
-        OnStopCar?.Invoke(1);
+        OnPressBttnFree?.Invoke();
+        Debug.Log("### OnPressBttnFree ");
 
-        Activate(true);
+        Visible(false);
     }
 
-    private void Activate(bool value)
+    private void Visible(bool value)
     {
         DOVirtual.DelayedCall(0, () =>
         {
-            bttn.SetActive(!value);
+            bttn.SetActive(value);
             
             bttn.transform.localScale = Vector3.one;
 

@@ -12,12 +12,10 @@ public class UICompleteController : MonoBehaviour
     
     private void OnEnable()
     {
-        UIGameOverController.OnChangeScore += Change;
     }
 
     private void OnDisable()
     {
-        UIGameOverController.OnChangeScore -= Change;
     }
     
     private void Awake()

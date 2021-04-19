@@ -15,16 +15,10 @@ public class UISmilesSpawner : MonoBehaviour
    
    private void OnEnable()
    {
-        DialogueManager.OnReceivedAnswer += CheckAnswer;  
-
-        DriverController.OnPassengerReaction += ReceivedAnswer;
    }
 
    private void OnDisable()
    {
-       DialogueManager.OnReceivedAnswer -= CheckAnswer; 
-       
-       DriverController.OnPassengerReaction -= ReceivedAnswer;
    }
 
    private void CheckAnswer(AnswerStatus value)
